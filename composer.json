@@ -1,0 +1,26 @@
+{
+    "name": "jonsa/pimple-ioc",
+    "description": "Resolve classes out of a Pimple container",
+    "keywords": ["pimple", "ioc"],
+    "type": "library",
+    "require": {
+        "pimple/pimple": "~3.0"
+    },
+    "require-dev": {
+		"phpunit/phpunit": "4.8.*"
+	},
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jonas Sandstrom",
+            "email": "jonas@sandstrom.im"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "Jonsa\\": "src/Jonsa/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Test\\": "tests/Test/" }
+    },
+    "minimum-stability": "stable"
+}
