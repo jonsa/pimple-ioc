@@ -14,6 +14,6 @@ final class Events {
 	 *
 	 * @var string
 	 */
-	const CLASS_RESOLVED = 'Jonas\\PimpleResolver::class_resolved';
+	const CLASS_RESOLVED = 'jonsa.pimple_resolver.class_resolved';
 
 }
