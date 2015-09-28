@@ -9,7 +9,7 @@ use Pimple\Container;
 /**
  * Class TestServiceProvider
  *
- * @package Test\Jonsa\PimpleResolver
+ * @package Jonsa\PimpleResolver\Test
  * @author Jonas Sandström
  */
 class ServiceProviderTest extends \PHPUnit_Framework_TestCase {

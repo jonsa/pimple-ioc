@@ -8,7 +8,7 @@ use Pimple\Container;
 /**
  * Class ClassResolverTest
  *
- * @package Test\Jonsa\PimpleResolver
+ * @package Jonsa\PimpleResolver\Test
  * @author Jonas Sandström
  */
 class ClassResolverTest extends \PHPUnit_Framework_TestCase {
