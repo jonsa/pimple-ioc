@@ -24,10 +24,9 @@ This will register the ```make``` key on the Container which resolves the reques
 $instance = $container['make']('Acme\MyClass');
 ```
 
-### Binding definitions
-To bind an interface to a concrete implementation you simply bind the class name to the interface name.
+and the ```bind``` key to bind a definition to a concrete implementation
 ```php
-$container['Acme\MyInterface'] = 'Acme\MyClass';
+$container['bind']('Acme\MyInterface', 'Acme\MyClass');
 ```
 
 ### Resolved recursively
@@ -45,7 +44,7 @@ class Baz {
     public function __construct(Bar $bar) {}
 }
 
-$container['FooContract'] = 'FooClass';
+$container['bind']('FooContract', 'FooClass');
 $baz = $container['make']('Baz');
 ```
 
@@ -82,10 +81,10 @@ $container[ServiceProvider::CLASS_RESOLVER_LISTENER](
 The first argument is the listener callback and the second is an array of events to listen to. If no second argument is provided the listener is registered to all events.
 
 ## Configuration
-The ServiceProvider has two configuration parameters.
+The ServiceProvider has three configuration parameters.
 ```php
 class ServiceProvider implements ServiceProviderInterface {
-    public function __construct($bindContainerInstance = true, $makeMethod = 'make')
+    public function __construct($bindContainerInstance = true, $makeMethod = 'make', $bindMethod = 'bind')
     {
         ...
     }
@@ -95,3 +94,5 @@ class ServiceProvider implements ServiceProviderInterface {
 ```$bindContainerInstance``` tells the ServiceProvider whether to bind the container instance to the ```'Pimple\Container'``` key. If the container is extended, that class name will also be bound to the container instance.
 
 ```$makeMethod``` is used to define which key on the container to be used as the make method.
+
+```$bindMethod``` is used to define which key on the container to be used as the bind method.

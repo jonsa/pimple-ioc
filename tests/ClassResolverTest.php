@@ -116,7 +116,7 @@ class ClassResolverTest extends \PHPUnit_Framework_TestCase {
 		$concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
 		$count = 0;
 
-		$this->resolver->registerEventListener(function () use (&$count) {
+		$this->resolver->addListener(function () use (&$count) {
 			$count++;
 		});
 
@@ -132,11 +132,11 @@ class ClassResolverTest extends \PHPUnit_Framework_TestCase {
 		$count1 = 0;
 		$count2 = 0;
 
-		$this->resolver->registerEventListener(function () use (&$count1) {
+		$this->resolver->addListener(function () use (&$count1) {
 			$count1++;
 		}, $events);
 
-		$this->resolver->registerEventListener(function () use (&$count2) {
+		$this->resolver->addListener(function () use (&$count2) {
 			$count2++;
 		}, array());
 

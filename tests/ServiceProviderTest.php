@@ -29,13 +29,31 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase {
 	public function testCustomMakeMethod()
 	{
 		$container = new Container();
+
+		$this->assertFalse(isset($container['build']));
 		$container->register(new ServiceProvider(false, 'build'));
+		$this->assertTrue(isset($container['build']));
 
 		$concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
-
 		$object = $container['build']($concrete);
 
-		$this->assertEquals('build', $container[ServiceProvider::CLASS_RESOLVER_KEY]);
+		$this->assertInstanceOf($concrete, $object);
+	}
+
+	public function testCustomBindMethod()
+	{
+		$container = new Container();
+
+		$this->assertFalse(isset($container['binding']));
+		$container->register(new ServiceProvider(false, 'make', 'binding'));
+		$this->assertTrue(isset($container['binding']));
+
+		$abstract = 'Jonsa\\PimpleResolver\\Test\\Data\\FooInterface';
+		$concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
+		$container['binding']($abstract, $concrete);
+
+		$object = $container['make']($abstract);
+
 		$this->assertInstanceOf($concrete, $object);
 	}
 
@@ -82,7 +100,7 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase {
 		$container->register(new ServiceProvider(false));
 		$count = 1;
 
-		$container[ServiceProvider::CLASS_RESOLVER_LISTENER](
+		$container[ServiceProvider::CLASS_RESOLVER]->addListener(
 			function () use (&$count) {
 				$count++;
 			},

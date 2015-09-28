@@ -17,21 +17,7 @@ class ServiceProvider implements ServiceProviderInterface {
 	 *
 	 * @var string
 	 */
-	const CLASS_RESOLVER = 'Jonsa\\PimpleResolver::class_resolver';
-
-	/**
-	 * This key will be populated with the resolver method key.
-	 *
-	 * @var string
-	 */
-	const CLASS_RESOLVER_KEY = 'Jonsa\\PimpleResolver::class_resolver_key';
-
-	/**
-	 * Use this key to register event listener.
-	 *
-	 * @var string
-	 */
-	const CLASS_RESOLVER_LISTENER = 'Jonsa\\PimpleResolver::class_resolver_listener';
+	const CLASS_RESOLVER = 'jonsa.pimple_resolver.class_resolver';
 
 	/**
 	 * @var bool
@@ -44,13 +30,20 @@ class ServiceProvider implements ServiceProviderInterface {
 	private $makeMethod;
 
 	/**
+	 * @var string
+	 */
+	private $bindMethod;
+
+	/**
 	 * @param bool $bindContainerInstance
 	 * @param string $makeMethod
+	 * @param string $bindMethod
 	 */
-	public function __construct($bindContainerInstance = true, $makeMethod = 'make')
+	public function __construct($bindContainerInstance = true, $makeMethod = 'make', $bindMethod = 'bind')
 	{
 		$this->bindContainerInstance = (bool) $bindContainerInstance;
 		$this->makeMethod = $makeMethod;
+		$this->bindMethod = $bindMethod;
 	}
 
 	/**
@@ -72,8 +65,6 @@ class ServiceProvider implements ServiceProviderInterface {
 			return $resolver;
 		};
 
-		$container[self::CLASS_RESOLVER_KEY] = $this->makeMethod;
-
 		$container[$this->makeMethod] = $container->protect(
 			function ($abstract, $parameters = array()) use ($container) {
 				return $container[ServiceProvider::CLASS_RESOLVER]
@@ -81,10 +72,10 @@ class ServiceProvider implements ServiceProviderInterface {
 			}
 		);
 
-		$container[self::CLASS_RESOLVER_LISTENER] = $container->protect(
-			function (\Closure $listener, array $toEvents = null) use ($container) {
-				$container[ServiceProvider::CLASS_RESOLVER]
-					->registerEventListener($listener, $toEvents);
+		$container[$this->bindMethod] = $container->protect(
+			function ($abstract, $concrete, $protect = false) use ($container) {
+				return $container[ServiceProvider::CLASS_RESOLVER]
+					->bind($abstract, $concrete, $protect);
 			}
 		);
 	}

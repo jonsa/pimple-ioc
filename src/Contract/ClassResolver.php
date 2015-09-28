@@ -14,7 +14,7 @@ interface ClassResolver {
 	 * @param \Closure $listener
 	 * @param array $toEvents
 	 */
-	public function registerEventListener(\Closure $listener, array $toEvents = null);
+	public function addListener(\Closure $listener, array $toEvents = null);
 
 	/**
 	 * Instantiate a concrete instance of the given type.
