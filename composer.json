@@ -17,10 +17,10 @@
         }
     ],
     "autoload": {
-        "psr-4": { "Jonsa\\": "src/Jonsa/" }
+        "psr-4": { "Jonsa\\PimpleResolver\\": "src/" }
     },
     "autoload-dev": {
-        "psr-4": { "Test\\": "tests/Test/" }
+        "psr-4": { "Jonsa\\PimpleResolver\\Test\\": "tests/" }
     },
     "minimum-stability": "stable"
 }

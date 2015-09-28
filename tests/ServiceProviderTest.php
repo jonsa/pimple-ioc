@@ -1,16 +1,16 @@
-<?php namespace Test\Jonsa\PimpleResolver;
+<?php namespace Jonsa\PimpleResolver\Test;
 
 use Jonsa\PimpleResolver\Events;
 use Jonsa\PimpleResolver\ServiceProvider;
+use Jonsa\PimpleResolver\Test\Data\Application;
+use Jonsa\PimpleResolver\Test\Data\TestResolver;
 use Pimple\Container;
-use Test\Jonsa\PimpleResolver\Data\Application;
-use Test\Jonsa\PimpleResolver\Data\TestResolver;
 
 /**
  * Class TestServiceProvider
  *
  * @package Test\Jonsa\PimpleResolver
- * @author Jonas Sandström
+ * @author Jonas SandstrÃ¶m
  */
 class ServiceProviderTest extends \PHPUnit_Framework_TestCase {
 
@@ -19,7 +19,7 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase {
 		$container = new Container();
 		$container->register(new ServiceProvider(false));
 
-		$concrete = 'Test\\Jonsa\\PimpleResolver\\Data\\FooClass';
+		$concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
 
 		$object = $container['make']($concrete);
 
@@ -31,7 +31,7 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase {
 		$container = new Container();
 		$container->register(new ServiceProvider(false, 'build'));
 
-		$concrete = 'Test\\Jonsa\\PimpleResolver\\Data\\FooClass';
+		$concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
 
 		$object = $container['build']($concrete);
 
@@ -49,7 +49,7 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase {
 			return $resolver;
 		}};
 
-		$container['make']('Test\\Jonsa\\PimpleResolver\\Data\\FooClass');
+		$container['make']('Jonsa\\PimpleResolver\\Test\\Data\\FooClass');
 
 		$this->assertEquals(1, $resolver->count);
 	}
@@ -89,7 +89,7 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase {
 			array(Events::CLASS_RESOLVED)
 		);
 
-		$concrete = 'Test\\Jonsa\\PimpleResolver\\Data\\FooClass';
+		$concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
 		$container['make']($concrete);
 
 		$this->assertEquals(2, $count);

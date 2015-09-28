@@ -7,7 +7,7 @@ use Pimple\ServiceProviderInterface;
  * Class ServiceProvider
  *
  * @package Jonsa\PimpleResolver
- * @author Jonas Sandström
+ * @author Jonas SandstrÃ¶m
  */
 class ServiceProvider implements ServiceProviderInterface {
 

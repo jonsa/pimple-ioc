@@ -1,15 +1,15 @@
-<?php namespace Test\Jonsa\PimpleResolver;
+<?php namespace Jonsa\PimpleResolver\Test;
 
 use Jonsa\PimpleResolver\ClassResolver;
 use Jonsa\PimpleResolver\Events;
+use Jonsa\PimpleResolver\Test\Data\FooClass;
 use Pimple\Container;
-use Test\Jonsa\PimpleResolver\Data\FooClass;
 
 /**
  * Class ClassResolverTest
  *
  * @package Test\Jonsa\PimpleResolver
- * @author Jonas Sandström
+ * @author Jonas SandstrÃ¶m
  */
 class ClassResolverTest extends \PHPUnit_Framework_TestCase {
 
@@ -39,15 +39,15 @@ class ClassResolverTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testBindingExceptionThrownIfClassCannotBeInstantiated()
 	{
-		$abstract = 'Test\\Jonsa\\PimpleResolver\\Data\\FooInterface';
+		$abstract = 'Jonsa\\PimpleResolver\\Test\\Data\\FooInterface';
 
 		$this->resolver->resolve($abstract);
 	}
 
 	public function testResolveAbstractImplementation()
 	{
-		$abstract = 'Test\\Jonsa\\PimpleResolver\\Data\\FooInterface';
-		$concrete = 'Test\\Jonsa\\PimpleResolver\\Data\\FooClass';
+		$abstract = 'Jonsa\\PimpleResolver\\Test\\Data\\FooInterface';
+		$concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
 
 		$this->container[$abstract] = $concrete;
 
@@ -58,7 +58,7 @@ class ClassResolverTest extends \PHPUnit_Framework_TestCase {
 
 	public function testAutomaticallyResolveConcreteClasses()
 	{
-		$concrete = 'Test\\Jonsa\\PimpleResolver\\Data\\FooClass';
+		$concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
 
 		$object = $this->resolver->resolve($concrete);
 
@@ -67,7 +67,7 @@ class ClassResolverTest extends \PHPUnit_Framework_TestCase {
 
 	public function testResolvedClassesShouldBeDifferent()
 	{
-		$concrete = 'Test\\Jonsa\\PimpleResolver\\Data\\FooClass';
+		$concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
 
 		$object1 = $this->resolver->resolve($concrete);
 		$object2 = $this->resolver->resolve($concrete);
@@ -77,9 +77,9 @@ class ClassResolverTest extends \PHPUnit_Framework_TestCase {
 
 	public function testDependenciesAreAutomaticallyResolved()
 	{
-		$abstract = 'Test\\Jonsa\\PimpleResolver\\Data\\FooInterface';
-		$concrete = 'Test\\Jonsa\\PimpleResolver\\Data\\FooClass';
-		$expected = 'Test\\Jonsa\\PimpleResolver\\Data\\BarClass';
+		$abstract = 'Jonsa\\PimpleResolver\\Test\\Data\\FooInterface';
+		$concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
+		$expected = 'Jonsa\\PimpleResolver\\Test\\Data\\BarClass';
 
 		$this->container[$abstract] = $concrete;
 
@@ -90,7 +90,7 @@ class ClassResolverTest extends \PHPUnit_Framework_TestCase {
 
 	public function testConstructorArgumentsProvidedAtRuntime()
 	{
-		$concrete = 'Test\\Jonsa\\PimpleResolver\\Data\\BazClass';
+		$concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\BazClass';
 
 		$object = $this->resolver->resolve($concrete, array(
 			'extra' => 10
@@ -101,7 +101,7 @@ class ClassResolverTest extends \PHPUnit_Framework_TestCase {
 
 	public function testConcreteConstructorArgumentsProvidedAtRuntime()
 	{
-		$concrete = 'Test\\Jonsa\\PimpleResolver\\Data\\BazClass';
+		$concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\BazClass';
 		$foo = new FooClass();
 
 		$object1 = $this->resolver->resolve($concrete);
@@ -115,7 +115,7 @@ class ClassResolverTest extends \PHPUnit_Framework_TestCase {
 
 	public function testEventCallbackIsCalledWhenClassInstantiated()
 	{
-		$concrete = 'Test\\Jonsa\\PimpleResolver\\Data\\FooClass';
+		$concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
 		$count = 0;
 
 		$this->resolver->registerEventListener(function () use (&$count) {
@@ -129,7 +129,7 @@ class ClassResolverTest extends \PHPUnit_Framework_TestCase {
 
 	public function testEventListenersAreOnlyFiredForRequestedEvents()
 	{
-		$concrete = 'Test\\Jonsa\\PimpleResolver\\Data\\FooClass';
+		$concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
 		$events = array(Events::CLASS_RESOLVED);
 		$count1 = 0;
 		$count2 = 0;

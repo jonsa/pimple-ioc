@@ -9,7 +9,7 @@ use Pimple\Container;
  * Class ClassResolver
  *
  * @package Jonsa\PimpleResolver
- * @author Jonas Sandström
+ * @author Jonas SandstrÃ¶m
  */
 class ClassResolver implements ClassResolverContract {
 

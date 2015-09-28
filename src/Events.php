@@ -4,7 +4,7 @@
  * Class Events
  *
  * @package Jonsa\PimpleResolver
- * @author Jonas Sandström
+ * @author Jonas SandstrÃ¶m
  */
 final class Events {
 

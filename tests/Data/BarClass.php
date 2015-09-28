@@ -1,4 +1,4 @@
-<?php namespace Test\Jonsa\PimpleResolver\Data;
+<?php namespace Jonsa\PimpleResolver\Test\Data;
 
 class BarClass {
 

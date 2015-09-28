@@ -4,7 +4,7 @@
  * Interface ClassResolver
  *
  * @package Jonsa\PimpleResolver\Contract
- * @author Jonas Sandström
+ * @author Jonas SandstrÃ¶m
  */
 interface ClassResolver {
 
