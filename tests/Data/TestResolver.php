@@ -13,4 +13,8 @@ class TestResolver implements \Jonsa\PimpleResolver\Contract\ClassResolver {
 		$this->count++;
 	}
 
+	public function bind($abstract, $concrete, $protect = false)
+	{
+	}
+
 }

@@ -31,11 +31,11 @@ class ClassResolver implements ClassResolverContract {
 	private $buildStack = array();
 
 	/**
-	 * @param Container $container
+	 *
 	 */
-	public function __construct(Container $container)
+	public function __construct()
 	{
-		$this->container = $container;
+		$this->container = new Container();
 	}
 
 	/**
@@ -76,11 +76,27 @@ class ClassResolver implements ClassResolverContract {
 	}
 
 	/**
+	 * Bind an abstract definition to a concrete implementation.
+	 *
+	 * @param string $abstract
+	 * @param string|\Closure $concrete
+	 * @param bool $protect
+	 */
+	public function bind($abstract, $concrete, $protect = false)
+	{
+		if ($protect) {
+			$concrete = $this->container->protect($concrete);
+		}
+
+		$this->container[$abstract] = $concrete;
+	}
+
+	/**
 	 * Get the concrete type for a given abstract.
 	 *
 	 * @param string $abstract
 	 *
-	 * @return mixed   $concrete
+	 * @return mixed $concrete
 	 */
 	protected function getConcrete($abstract)
 	{

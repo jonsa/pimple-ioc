@@ -26,4 +26,15 @@ interface ClassResolver {
 	 */
 	public function resolve($abstract, $parameters = array());
 
+	/**
+	 * Bind an abstract definition to a concrete implementation.
+	 *
+	 * @param string $abstract
+	 * @param string|\Closure $concrete
+	 * @param bool $protect
+	 *
+	 * @return void
+	 */
+	public function bind($abstract, $concrete, $protect = false);
+
 }

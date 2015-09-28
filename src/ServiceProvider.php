@@ -1,5 +1,6 @@
 <?php namespace Jonsa\PimpleResolver;
 
+use Jonsa\PimpleResolver\Contract\ClassResolver as ClassResolverContract;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -62,22 +63,13 @@ class ServiceProvider implements ServiceProviderInterface {
 	 */
 	public function register(Container $container)
 	{
-		if ($this->bindContainerInstance) {
-			$class = get_class($container);
+		$that = $this;
 
-			$container[$class] = $container->protect(function () use ($container) {
-				return $container;
-			});
+		$container[self::CLASS_RESOLVER] = function () use ($that, $container) {
+			$resolver = new ClassResolver();
+			$that->bindContainer($resolver, $container);
 
-			if ('Pimple\\Container' !== $class) {
-				$container['Pimple\\Container'] = $container->protect(function () use ($container) {
-					return $container;
-				});
-			}
-		}
-
-		$container[self::CLASS_RESOLVER] = function (Container $container) {
-			return new ClassResolver($container);
+			return $resolver;
 		};
 
 		$container[self::CLASS_RESOLVER_KEY] = $this->makeMethod;
@@ -95,6 +87,28 @@ class ServiceProvider implements ServiceProviderInterface {
 					->registerEventListener($listener, $toEvents);
 			}
 		);
+	}
+
+	/**
+	 * @param ClassResolverContract $resolver
+	 * @param Container $container
+	 */
+	private function bindContainer(ClassResolverContract $resolver, Container $container)
+	{
+		if ($this->bindContainerInstance) {
+			$base = 'Pimple\\Container';
+			$class = get_class($container);
+
+			$resolver->bind($base, function () use ($container) {
+				return $container;
+			}, true);
+
+			if ($class !== $base) {
+				$resolver->bind($class, function () use ($container) {
+					return $container;
+				}, true);
+			}
+		}
 	}
 
 }

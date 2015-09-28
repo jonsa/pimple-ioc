@@ -49,8 +49,7 @@ class ClassResolverTest extends \PHPUnit_Framework_TestCase {
 		$abstract = 'Jonsa\\PimpleResolver\\Test\\Data\\FooInterface';
 		$concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
 
-		$this->container[$abstract] = $concrete;
-
+		$this->resolver->bind($abstract, $concrete);
 		$object = $this->resolver->resolve($abstract);
 
 		$this->assertInstanceOf($concrete, $object);
@@ -81,8 +80,7 @@ class ClassResolverTest extends \PHPUnit_Framework_TestCase {
 		$concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
 		$expected = 'Jonsa\\PimpleResolver\\Test\\Data\\BarClass';
 
-		$this->container[$abstract] = $concrete;
-
+		$this->resolver->bind($abstract, $concrete);
 		$object = $this->resolver->resolve($expected);
 
 		$this->assertInstanceOf($expected, $object);
