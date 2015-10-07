@@ -12,105 +12,106 @@ use Pimple\Container;
  * @package Jonsa\PimpleResolver\Test
  * @author Jonas Sandström
  */
-class ServiceProviderTest extends \PHPUnit_Framework_TestCase {
+class ServiceProviderTest extends \PHPUnit_Framework_TestCase
+{
 
-	public function testResolveMethodIsRegisteredInTheContainer()
-	{
-		$container = new Container();
-		$container->register(new ServiceProvider(false));
+    public function testResolveMethodIsRegisteredInTheContainer()
+    {
+        $container = new Container();
+        $container->register(new ServiceProvider(false));
 
-		$concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
+        $concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
 
-		$object = $container['make']($concrete);
+        $object = $container['make']($concrete);
 
-		$this->assertInstanceOf($concrete, $object);
-	}
+        $this->assertInstanceOf($concrete, $object);
+    }
 
-	public function testCustomMakeMethod()
-	{
-		$container = new Container();
+    public function testCustomMakeMethod()
+    {
+        $container = new Container();
 
-		$this->assertFalse(isset($container['build']));
-		$container->register(new ServiceProvider(false, 'build'));
-		$this->assertTrue(isset($container['build']));
+        $this->assertFalse(isset($container['build']));
+        $container->register(new ServiceProvider(false, 'build'));
+        $this->assertTrue(isset($container['build']));
 
-		$concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
-		$object = $container['build']($concrete);
+        $concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
+        $object = $container['build']($concrete);
 
-		$this->assertInstanceOf($concrete, $object);
-	}
+        $this->assertInstanceOf($concrete, $object);
+    }
 
-	public function testCustomBindMethod()
-	{
-		$container = new Container();
+    public function testCustomBindMethod()
+    {
+        $container = new Container();
 
-		$this->assertFalse(isset($container['binding']));
-		$container->register(new ServiceProvider(false, 'make', 'binding'));
-		$this->assertTrue(isset($container['binding']));
+        $this->assertFalse(isset($container['binding']));
+        $container->register(new ServiceProvider(false, 'make', 'binding'));
+        $this->assertTrue(isset($container['binding']));
 
-		$abstract = 'Jonsa\\PimpleResolver\\Test\\Data\\FooInterface';
-		$concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
-		$container['binding']($abstract, $concrete);
+        $abstract = 'Jonsa\\PimpleResolver\\Test\\Data\\FooInterface';
+        $concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
+        $container['binding']($abstract, $concrete);
 
-		$object = $container['make']($abstract);
+        $object = $container['make']($abstract);
 
-		$this->assertInstanceOf($concrete, $object);
-	}
+        $this->assertInstanceOf($concrete, $object);
+    }
 
-	public function testCustomResolverClass()
-	{
-		$container = new Container();
-		$container->register(new ServiceProvider(false));
-		$resolver = new TestResolver($container);
+    public function testCustomResolverClass()
+    {
+        $container = new Container();
+        $container->register(new ServiceProvider(false));
+        $resolver = new TestResolver($container);
 
-		$container[ServiceProvider::CLASS_RESOLVER] = function () use ($resolver) {{
-			return $resolver;
-		}};
+        $container[ServiceProvider::CLASS_RESOLVER] = function () use ($resolver) {
+            return $resolver;
+        };
 
-		$container['make']('Jonsa\\PimpleResolver\\Test\\Data\\FooClass');
+        $container['make']('Jonsa\\PimpleResolver\\Test\\Data\\FooClass');
 
-		$this->assertEquals(1, $resolver->count);
-	}
+        $this->assertEquals(1, $resolver->count);
+    }
 
-	public function testContainerInstanceRegisteredInTheContainer()
-	{
-		$container = new Container();
-		$container->register(new ServiceProvider());
+    public function testContainerInstanceRegisteredInTheContainer()
+    {
+        $container = new Container();
+        $container->register(new ServiceProvider());
 
-		$object = $container['make'](get_class($container));
+        $object = $container['make'](get_class($container));
 
-		$this->assertSame($container, $object);
-	}
+        $this->assertSame($container, $object);
+    }
 
-	public function testExtendedContainerInstanceRegisteredInTheContainerWithBothNames()
-	{
-		$app = new Application();
-		$app->register(new ServiceProvider());
+    public function testExtendedContainerInstanceRegisteredInTheContainerWithBothNames()
+    {
+        $app = new Application();
+        $app->register(new ServiceProvider());
 
-		$object = $app['make'](get_class($app));
-		$container = $app['make']('Pimple\\Container');
+        $object = $app['make'](get_class($app));
+        $container = $app['make']('Pimple\\Container');
 
-		$this->assertSame($app, $object);
-		$this->assertSame($container, $object);
-	}
+        $this->assertSame($app, $object);
+        $this->assertSame($container, $object);
+    }
 
-	public function testEventListenerMethodIsRegisteredOnTheContainer()
-	{
-		$container = new Container();
-		$container->register(new ServiceProvider(false));
-		$count = 1;
+    public function testEventListenerMethodIsRegisteredOnTheContainer()
+    {
+        $container = new Container();
+        $container->register(new ServiceProvider(false));
+        $count = 1;
 
-		$container[ServiceProvider::CLASS_RESOLVER]->addListener(
-			function () use (&$count) {
-				$count++;
-			},
-			array(Events::CLASS_RESOLVED)
-		);
+        $container[ServiceProvider::CLASS_RESOLVER]->addListener(
+            function () use (&$count) {
+                $count++;
+            },
+            array(Events::CLASS_RESOLVED)
+        );
 
-		$concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
-		$container['make']($concrete);
+        $concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
+        $container['make']($concrete);
 
-		$this->assertEquals(2, $count);
-	}
+        $this->assertEquals(2, $count);
+    }
 
 }

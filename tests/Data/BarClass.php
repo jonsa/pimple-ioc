@@ -1,9 +1,10 @@
 <?php namespace Jonsa\PimpleResolver\Test\Data;
 
-class BarClass {
+class BarClass
+{
 
-	public function __construct(FooInterface $dependency)
-	{
-	}
+    public function __construct(FooInterface $dependency)
+    {
+    }
 
 }

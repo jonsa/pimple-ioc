@@ -6,6 +6,7 @@
  * @package Jonsa\PimpleResolver\Exception
  * @author Jonas Sandström
  */
-class BindingResolutionException extends \Exception {
+class BindingResolutionException extends \Exception
+{
 
 }

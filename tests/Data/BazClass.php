@@ -1,14 +1,15 @@
 <?php namespace Jonsa\PimpleResolver\Test\Data;
 
-class BazClass {
+class BazClass
+{
 
-	public $foo;
-	public $extra;
+    public $foo;
+    public $extra;
 
-	public function __construct(FooClass $foo, $extra = 0)
-	{
-		$this->foo = $foo;
-		$this->extra = $extra;
-	}
+    public function __construct(FooClass $foo, $extra = 0)
+    {
+        $this->foo = $foo;
+        $this->extra = $extra;
+    }
 
 }
