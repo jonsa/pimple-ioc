@@ -4,6 +4,8 @@ use Jonsa\PimpleResolver\Contract\ClassResolver as ClassResolverContract;
 use Jonsa\PimpleResolver\Event\ClassResolvedEvent;
 use Jonsa\PimpleResolver\Exception\BindingResolutionException;
 use Pimple\Container;
+use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class ClassResolver
@@ -20,9 +22,9 @@ class ClassResolver implements ClassResolverContract
     private $container;
 
     /**
-     * @var \Closure[]
+     * @var EventDispatcherInterface
      */
-    private $listeners = array();
+    private $dispatcher;
 
     /**
      * The stack of concretions being current built.
@@ -32,22 +34,12 @@ class ClassResolver implements ClassResolverContract
     private $buildStack = array();
 
     /**
-     *
+     * @param EventDispatcherInterface $dispatcher
      */
-    public function __construct()
+    public function __construct(EventDispatcherInterface $dispatcher = null)
     {
         $this->container = new Container();
-    }
-
-    /**
-     * Register an event listener to class resolver.
-     *
-     * @param \Closure $listener
-     * @param array $toEvents
-     */
-    public function addListener(\Closure $listener, array $toEvents = null)
-    {
-        $this->listeners[] = array($listener, $toEvents);
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -71,7 +63,7 @@ class ClassResolver implements ClassResolverContract
             $object = $this->resolve($concrete, $parameters);
         }
 
-        $this->dispatch(Events::CLASS_RESOLVED, new ClassResolvedEvent($object));
+        $this->dispatchEvent(Events::CLASS_RESOLVED, new ClassResolvedEvent($object));
 
         return $object;
     }
@@ -305,17 +297,13 @@ class ClassResolver implements ClassResolverContract
     /**
      * Relay events to all listeners.
      *
-     * @param string $type
-     * @param mixed $event
+     * @param string $name
+     * @param Event $event
      */
-    protected function dispatch($type, $event)
+    protected function dispatchEvent($name, Event $event)
     {
-        foreach ($this->listeners as $listener) {
-            list($callback, $types) = $listener;
-
-            if (null === $types || in_array($type, $types, true)) {
-                $callback($event, $type);
-            }
+        if ($this->dispatcher) {
+            $this->dispatcher->dispatch($name, $event);
         }
     }
 

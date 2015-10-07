@@ -21,6 +21,14 @@ class ServiceProvider implements ServiceProviderInterface
     const CLASS_RESOLVER = 'jonsa.pimple_resolver.class_resolver';
 
     /**
+     * Set the event dispatcher. Either a dispatcher instance or a string where
+     * a dispatcher can be found in the container.
+     *
+     * @var string
+     */
+    const EVENT_DISPATCHER = 'jonsa.pimple_resolver.event_dispatcher';
+
+    /**
      * @var bool
      */
     private $bindContainerInstance;
@@ -60,7 +68,7 @@ class ServiceProvider implements ServiceProviderInterface
         $that = $this;
 
         $container[self::CLASS_RESOLVER] = function () use ($that, $container) {
-            $resolver = new ClassResolver();
+            $resolver = new ClassResolver($that->getEventDispatcher($container));
             $that->bindContainer($resolver, $container);
 
             return $resolver;
@@ -101,6 +109,25 @@ class ServiceProvider implements ServiceProviderInterface
                 }, true);
             }
         }
+    }
+
+    /**
+     * @param Container $container
+     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface|null
+     */
+    private function getEventDispatcher(Container $container)
+    {
+        if ($container->offsetExists(self::EVENT_DISPATCHER)) {
+            $dispatcher = $container[self::EVENT_DISPATCHER];
+
+            if (is_string($dispatcher)) {
+                return $container[$dispatcher];
+            }
+
+            return $dispatcher;
+        }
+
+        return null;
     }
 
 }

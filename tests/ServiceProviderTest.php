@@ -5,6 +5,7 @@ use Jonsa\PimpleResolver\ServiceProvider;
 use Jonsa\PimpleResolver\Test\Data\Application;
 use Jonsa\PimpleResolver\Test\Data\TestResolver;
 use Pimple\Container;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * Class TestServiceProvider
@@ -62,7 +63,7 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase
     {
         $container = new Container();
         $container->register(new ServiceProvider(false));
-        $resolver = new TestResolver($container);
+        $resolver = new TestResolver();
 
         $container[ServiceProvider::CLASS_RESOLVER] = function () use ($resolver) {
             return $resolver;
@@ -95,18 +96,18 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($container, $object);
     }
 
-    public function testEventListenerMethodIsRegisteredOnTheContainer()
+    public function testEventListener()
     {
+        $dispatcher = new EventDispatcher();
         $container = new Container();
-        $container->register(new ServiceProvider(false));
-        $count = 1;
+        $container->register(new ServiceProvider(false), array(
+            ServiceProvider::EVENT_DISPATCHER => $dispatcher
+        ));
 
-        $container[ServiceProvider::CLASS_RESOLVER]->addListener(
-            function () use (&$count) {
-                $count++;
-            },
-            array(Events::CLASS_RESOLVED)
-        );
+        $count = 1;
+        $dispatcher->addListener(Events::CLASS_RESOLVED, function () use (&$count) {
+            $count++;
+        });
 
         $concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
         $container['make']($concrete);
@@ -114,4 +115,17 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $count);
     }
 
+    /**
+     * @expectedException \PHPUnit_Framework_Error
+     */
+    public function testInvalidDispatcherProvidedThrowsAnError()
+    {
+        $container = new Container();
+        $container->register(new ServiceProvider(false), array(
+            ServiceProvider::EVENT_DISPATCHER => new \stdClass()
+        ));
+
+        $concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
+        $container['make']($concrete);
+    }
 }

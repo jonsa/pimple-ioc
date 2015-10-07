@@ -3,7 +3,7 @@
 use Jonsa\PimpleResolver\ClassResolver;
 use Jonsa\PimpleResolver\Events;
 use Jonsa\PimpleResolver\Test\Data\FooClass;
-use Pimple\Container;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * Class ClassResolverTest
@@ -13,11 +13,6 @@ use Pimple\Container;
  */
 class ClassResolverTest extends \PHPUnit_Framework_TestCase
 {
-
-    /**
-     * @var Container
-     */
-    private $container;
 
     /**
      * @var ClassResolver
@@ -31,8 +26,7 @@ class ClassResolverTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->container = new Container();
-        $this->resolver = new ClassResolver($this->container);
+        $this->resolver = new ClassResolver();
     }
 
     /**
@@ -114,37 +108,19 @@ class ClassResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testEventCallbackIsCalledWhenClassInstantiated()
     {
+        $dispatcher = new EventDispatcher();
+        $resolver = new ClassResolver($dispatcher);
+
         $concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
         $count = 0;
 
-        $this->resolver->addListener(function () use (&$count) {
+        $dispatcher->addListener(Events::CLASS_RESOLVED, function () use (&$count) {
             $count++;
         });
 
-        $this->resolver->resolve($concrete);
+        $resolver->resolve($concrete);
 
         $this->assertEquals(1, $count);
-    }
-
-    public function testEventListenersAreOnlyFiredForRequestedEvents()
-    {
-        $concrete = 'Jonsa\\PimpleResolver\\Test\\Data\\FooClass';
-        $events = array(Events::CLASS_RESOLVED);
-        $count1 = 0;
-        $count2 = 0;
-
-        $this->resolver->addListener(function () use (&$count1) {
-            $count1++;
-        }, $events);
-
-        $this->resolver->addListener(function () use (&$count2) {
-            $count2++;
-        }, array());
-
-        $this->resolver->resolve($concrete);
-
-        $this->assertEquals(1, $count1);
-        $this->assertEquals(0, $count2);
     }
 
 }

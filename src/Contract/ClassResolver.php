@@ -10,14 +10,6 @@ interface ClassResolver
 {
 
     /**
-     * Register an event listener to class resolver.
-     *
-     * @param \Closure $listener
-     * @param array $toEvents
-     */
-    public function addListener(\Closure $listener, array $toEvents = null);
-
-    /**
      * Instantiate a concrete instance of the given type.
      *
      * @param string $abstract

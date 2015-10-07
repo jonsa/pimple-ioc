@@ -1,12 +1,14 @@
 <?php namespace Jonsa\PimpleResolver\Event;
 
+use Symfony\Component\EventDispatcher\Event;
+
 /**
  * Class ClassResolvedEvent
  *
  * @package Jonsa\PimpleResolver\Event
  * @author Jonas Sandström
  */
-class ClassResolvedEvent
+class ClassResolvedEvent extends Event
 {
 
     /**
