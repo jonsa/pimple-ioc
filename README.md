@@ -68,17 +68,22 @@ To customize a resolved class before it is returned from the resolver, simply li
 ```php
 use Jonsa\PimpleResolver\ServiceProvider;
 use Jonsa\PimpleResolver\Events;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
-$container[ServiceProvider::CLASS_RESOLVER_LISTENER](
-    function (ClassResolvedEvent $event) {
-        $object = $event->getResolvedObject();
-        ...
-    },
-    array(Events::CLASS_RESOLVED)
-);
+$dispatcher = new EventDispatcher;
+$container[ServiceProvider::EVENT_DISPATCHER] = function () use ($dispatcher) {
+    return $dispatcher;
+});
+
+$dispatcher->addListener(Events::CLASS_RESOLVED, function (ClassResolvedEvent $event) {
+    $object = $event->getResolvedObject();
+    ...
+});
 ```
-
-The first argument is the listener callback and the second is an array of events to listen to. If no second argument is provided the listener is registered to all events.
+Alternatively the ```EVENT_DISPATCHER``` key can be populated with a string which in turn returns an event dispatcher from the container
+```php
+$container[ServiceProvider::EVENT_DISPATCHER] = 'my dispatcher key';
+```
 
 ## Configuration
 The ServiceProvider has three configuration parameters.
