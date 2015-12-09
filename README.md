@@ -37,7 +37,7 @@ interface FooContract {}
 class Foo implements FooContract {};
 
 class Bar {
-    public function __construct(Foo $foo) {}
+    public function __construct(FooContract $foo) {}
 }
 
 class Baz {
